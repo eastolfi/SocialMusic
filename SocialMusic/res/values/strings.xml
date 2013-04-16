@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Social Music</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- Menu -->
+    <string name="menu_settings">Ajustes</string>
+    <string name="menu_friends">Amigos</string>
+    <string name="menu_music">Mi Música</string>
+    <string name="title_activity_login_screen">LoginScreen</string>
+    <string name="btn_login">Acceder</string>
+    <string name="label_login">Iniciar Sesión</string>
+    <string name="label_register">Registrarse</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="label_user">Usuario</string>
+    <string name="label_pswd">Contraseña</string>
+    <string name="label_pswd_repeat">Repita su Contraseña</string>
+
+</resources>
