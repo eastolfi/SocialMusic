@@ -8,6 +8,8 @@
         android:minSdkVersion="9"
         android:targetSdkVersion="17" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -16,15 +18,25 @@
         <activity
             android:name="es.edu.android.socialmusic.MainScreen"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="es.edu.android.socialmusic.LoginScreen"
+            android:label="@string/title_activity_login_screen" >
+        </activity>
+        <activity
+            android:name="es.edu.android.socialmusic.activities.SocialMusic"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="es.edu.android.socialmusic.activities.SocialLogin"
+            android:label="@string/title_activity_social_login"
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="es.edu.android.socialmusic.LoginScreen"
-            android:label="@string/title_activity_login_screen" >
         </activity>
     </application>
 

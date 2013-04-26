@@ -1,5 +1,10 @@
 package es.edu.android.socialmusic;
 
+import com.echonest.api.v4.EchoNestAPI;
+import com.echonest.api.v4.EchoNestException;
+import com.echonest.api.v4.Song;
+import com.echonest.api.v4.SongParams;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -43,6 +48,17 @@ public class MainScreen extends Activity {
 		setContentView(R.layout.activity_main_screen);
 		((TextView) findViewById(R.id.txtUserLoged)).setText(
 			"Bienvenid@ " + prefs.getString("logUsername", "Anónimo"));
+		
+		try {
+			EchoNestAPI api = new EchoNestAPI("QFOJ7UZX0SSIZCSXG");
+			Song cancion = new Song(api, "ID");
+			SongParams sp = new SongParams();
+			sp.add("title", "karma");
+			sp.add("artist", "parkway drive");
+			api.searchSongs(sp);
+		} catch (EchoNestException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void initLoginScreen() {

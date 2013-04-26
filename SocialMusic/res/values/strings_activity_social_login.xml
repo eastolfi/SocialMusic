@@ -1,0 +1,25 @@
+<resources>
+
+    <string name="title_activity_social_login">Iniciar Sesión</string>
+    <string name="title_activity_social_register">Registrarse</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Correo</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="prompt_password_repeat">Repita Contraseña</string>
+    <string name="action_sign_in_register"><b>Accede</b> o regístrate</string>
+    <string name="action_sign_in_short">Acceder</string>
+    <string name="action_register_short">Registrarse</string>
+    <string name="action_forgot_password">Recuperar Contraseña</string>
+    <string name="login_progress_signing_in">Accediendo a Social Music...</string>
+    <string name="error_invalid_email">El correo no es válido</string>
+    <string name="error_used_email">Este correo ya está en uso</string>
+    <string name="error_invalid_password">La contraseña es demasiado corta</string>
+    <string name="error_incorrect_password">La contraseña no es válida</string>
+    <string name="error_password_not_match">Las contraseñas no coinciden</string>
+    <string name="error_field_required">Este campo es obligatorio</string>
+    <string name="register_link">¿Aún no tienes cuenta? Créese una ahora</string>
+    <string name="logIn_link">¿Ya tienes una cuenta? Accede ahora</string>
+    <string name="text_remember">Recordarme</string>
+
+</resources>
