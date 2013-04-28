@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -49,6 +50,7 @@ public class SocialLogin extends Activity {
 	private static final String ACTION_REGISTER = "register";
 	private static final String PREF_USER_LOGED = "userLoged";
 	private static final String PREF_USER_MAIL = "userMail";
+	private static final String PREF_USER_REMEMBER = "userRemember";
 	// Utils
 	private UserLoginTask mAuthTask = null;
 //	private String actualAction = ACTION_LOGIN;
@@ -70,10 +72,10 @@ public class SocialLogin extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		preferences = getSharedPreferences(PREF_USER_LOGED, Context.MODE_PRIVATE);
-		if (preferences.contains(PREF_USER_MAIL)) {
-			goToMainScreen(true);
-		}
+//		preferences = getSharedPreferences(PREF_USER_LOGED, Context.MODE_PRIVATE);
+//		if (preferences.contains(PREF_USER_MAIL)) {
+//			goToMainScreen(true);
+//		}
 		
 		setContentView(R.layout.activity_social_login_register);
 		
@@ -151,12 +153,12 @@ public class SocialLogin extends Activity {
 		});
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.social_login, menu);
-		return true;
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		super.onCreateOptionsMenu(menu);
+//		getMenuInflater().inflate(R.menu.social_login, menu);
+//		return true;
+//	}
 
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
@@ -359,12 +361,15 @@ public class SocialLogin extends Activity {
 	
 	private void goToMainScreen(boolean alredyLoged) {
 		if (!alredyLoged) {
-			SharedPreferences prefs = getSharedPreferences("userLoged", Context.MODE_PRIVATE);
+			SharedPreferences prefs = getSharedPreferences(PREF_USER_LOGED, Context.MODE_PRIVATE);
 			Editor edit = prefs.edit();
-			edit.putString("userMail", mEmail);
+			edit.putString(PREF_USER_MAIL, mEmail);
+			CheckBox ck = (CheckBox) findViewById(R.id.checkRecordar);
+			edit.putBoolean(PREF_USER_REMEMBER, ck.isChecked());
 			edit.commit();
 		}
 		Intent i = new Intent(getApplicationContext(), SocialMusic.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(i);
 	}
 	

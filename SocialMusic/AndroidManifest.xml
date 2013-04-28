@@ -25,18 +25,27 @@
         </activity>
         <activity
             android:name="es.edu.android.socialmusic.activities.SocialMusic"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="es.edu.android.socialmusic.activities.SocialLogin"
             android:label="@string/title_activity_social_login"
             android:noHistory="true"
             android:windowSoftInputMode="adjustResize|stateVisible" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity
+            android:name="es.edu.android.socialmusic.activities.SearchSong"
+            android:label="@string/title_activity_search_song"
+            android:parentActivityName="es.edu.android.socialmusic.activities.SocialMusic" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.edu.android.socialmusic.activities.SocialMusic" />
         </activity>
     </application>
 

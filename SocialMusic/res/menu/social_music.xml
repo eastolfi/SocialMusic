@@ -2,10 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_logout"
-        android:icon="@android:drawable/ic_lock_power_off"
+        android:id="@+id/menu_search_song"
+        android:icon="@android:drawable/ic_menu_search"
         android:showAsAction="ifRoom"
-        android:title="Desconexión">
+        android:title="Buscar Canciones">
     </item>
+
+    <group android:id="@+id/menu_account" >
+        <item
+            android:id="@+id/menu_logout"
+            android:icon="@android:drawable/ic_lock_power_off"
+            android:showAsAction="ifRoom"
+            android:title="Desconexión">
+        </item>
+    </group>
 
 </menu>
