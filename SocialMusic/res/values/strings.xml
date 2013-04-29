@@ -17,5 +17,7 @@
     <string name="label_pswd">Contraseña</string>
     <string name="label_pswd_repeat">Repita su Contraseña</string>
     <string name="title_activity_search_song">SearchSong</string>
+    <string name="title_activity_add_friend">Añadir Amigo</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

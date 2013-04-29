@@ -7,14 +7,25 @@
         android:showAsAction="ifRoom"
         android:title="Buscar Canciones">
     </item>
-
-    <group android:id="@+id/menu_account" >
-        <item
-            android:id="@+id/menu_logout"
-            android:icon="@android:drawable/ic_lock_power_off"
-            android:showAsAction="ifRoom"
-            android:title="Desconexión">
-        </item>
-    </group>
+    <item
+        android:id="@+id/menu_account"
+        android:icon="@drawable/ic_action_account"
+        android:showAsAction="ifRoom"
+        android:title="Cuenta">
+        <menu>
+            <item
+                android:id="@+id/menu_add_friend"
+                android:icon="@drawable/ic_action_add_friend"
+                android:showAsAction="ifRoom"
+                android:title="Añadir Amigo">
+            </item>
+            <item
+                android:id="@+id/menu_logout"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:showAsAction="ifRoom"
+                android:title="Desconexión">
+            </item>
+        </menu>
+    </item>
 
 </menu>

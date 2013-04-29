@@ -1,6 +1,5 @@
 package es.edu.android.socialmusic.activities;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,23 +22,23 @@ import com.echonest.api.v4.EchoNestAPI;
 import com.echonest.api.v4.EchoNestException;
 import com.echonest.api.v4.Song;
 import com.echonest.api.v4.SongParams;
-import com.google.code.jspot.Results;
-import com.google.code.jspot.Spotify;
-import com.google.code.jspot.Track;
 
 import es.edu.android.socialmusic.R;
-import es.edu.android.socialmusic.adapters.MyListAdapter;
+import es.edu.android.socialmusic.adapters.MySongListAdapter;
 
 public class SocialMusic extends Activity {
+	// Constants
 	private static final String PREF_USER_LOGED = "userLoged";
 	private static final String PREF_USER_MAIL = "userMail";
 	private static final String PREF_USER_REMEMBER = "userRemember";
 	private final String API_KEY = "QFOJ7UZX0SSIZCSXG";
-	private EchoNestAPI enAPI;
-//	private Spotify spfAPI;
-	SharedPreferences preferencesUser;
-	ListView currentSongs;
+	// Utils
 	Context ctx;
+	private EchoNestAPI enAPI;
+	SharedPreferences preferencesUser;
+//	private Spotify spfAPI;
+	// UI references
+	ListView currentSongs;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +47,6 @@ public class SocialMusic extends Activity {
 		
 		ctx = this;
 		enAPI = new EchoNestAPI(API_KEY);
-//		try {
-//			spfAPI = new Spotify();
-//			Results<Track> songs = spfAPI.searchTrack("Parkway Drive", "Karma");
-//			List<Track> items = songs.getItems();
-//			Track track = items.get(0);
-//			track.
-//		} catch (IOException e1) {
-//			e1.printStackTrace();
-//		}
 		
 		preferencesUser = getSharedPreferences(PREF_USER_LOGED, Context.MODE_PRIVATE);
 		if (!preferencesUser.contains(PREF_USER_MAIL)) {
@@ -103,7 +93,7 @@ public class SocialMusic extends Activity {
 							for (Song song : result) {
 								if (!songs.contains(song)) songs.add(song);
 							}
-							MyListAdapter songAdapter = new MyListAdapter(ctx, R.layout.simple_list_element, songs);
+							MySongListAdapter songAdapter = new MySongListAdapter(ctx, R.layout.simple_list_element, songs);
 							currentSongs.setAdapter(songAdapter);
 						}
 						pDialog.cancel();
@@ -130,6 +120,7 @@ public class SocialMusic extends Activity {
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		Intent i;
 		switch (item.getItemId()) {
 		case R.id.menu_logout:
 			Editor edit = preferencesUser.edit();
@@ -138,12 +129,16 @@ public class SocialMusic extends Activity {
 			goToLoginScreen();
 			
 			break;
-		case R.id.menu_search_song:
-			Intent i = new Intent(getApplicationContext(), SearchSong.class);
+		case R.id.menu_add_friend:
+			i = new Intent(ctx, AddFriend.class);
 			startActivity(i);
 			
 			break;
-
+		case R.id.menu_search_song:
+			i = new Intent(ctx, SearchSong.class);
+			startActivity(i);
+			
+			break;
 		}
 		return true;
 	}
@@ -167,7 +162,6 @@ public class SocialMusic extends Activity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 	}
 	

@@ -16,14 +16,6 @@
         android:label="@string/app_name"
         android:theme="@style/MyTheme" >
         <activity
-            android:name="es.edu.android.socialmusic.MainScreen"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name="es.edu.android.socialmusic.LoginScreen"
-            android:label="@string/title_activity_login_screen" >
-        </activity>
-        <activity
             android:name="es.edu.android.socialmusic.activities.SocialMusic"
             android:label="@string/app_name"
             android:noHistory="true" >
@@ -42,6 +34,14 @@
         <activity
             android:name="es.edu.android.socialmusic.activities.SearchSong"
             android:label="@string/title_activity_search_song"
+            android:parentActivityName="es.edu.android.socialmusic.activities.SocialMusic" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.edu.android.socialmusic.activities.SocialMusic" />
+        </activity>
+        <activity
+            android:name="es.edu.android.socialmusic.activities.AddFriend"
+            android:label="@string/title_activity_add_friend"
             android:parentActivityName="es.edu.android.socialmusic.activities.SocialMusic" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

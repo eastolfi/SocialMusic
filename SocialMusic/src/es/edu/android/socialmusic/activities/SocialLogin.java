@@ -1,7 +1,6 @@
 package es.edu.android.socialmusic.activities;
 
 import java.io.IOException;
-import java.util.prefs.Preferences;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -26,10 +25,8 @@ import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -43,9 +40,15 @@ import android.widget.ViewSwitcher;
 import es.edu.android.socialmusic.R;
 import es.edu.android.socialmusic.constants.IConstantsCode;
 
+/**
+ * Actividad encargada del login y registro en la aplicacion
+ * 
+ * @author e.astolfi
+ */
 public class SocialLogin extends Activity {
-//	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
 	// Constants
+	private final String HOST_PROD = "http://social-music.herokuapp.com/";
+	private final String HOST_DESA = "http://socialmusic.eastolfi.c9.io/";
 	private static final String ACTION_LOGIN = "login";
 	private static final String ACTION_REGISTER = "register";
 	private static final String PREF_USER_LOGED = "userLoged";
@@ -53,13 +56,12 @@ public class SocialLogin extends Activity {
 	private static final String PREF_USER_REMEMBER = "userRemember";
 	// Utils
 	private UserLoginTask mAuthTask = null;
-//	private String actualAction = ACTION_LOGIN;
+	private SharedPreferences preferences;
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
 	private String mPassword;
 	private String mPasswordRepeat;
-	private SharedPreferences preferences;
-	// UI references.
+	// UI references
 	private ViewSwitcher layoutSwitcher;
 	private EditText mEmailView;
 	private EditText mPasswordView;
@@ -71,15 +73,10 @@ public class SocialLogin extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-//		preferences = getSharedPreferences(PREF_USER_LOGED, Context.MODE_PRIVATE);
-//		if (preferences.contains(PREF_USER_MAIL)) {
-//			goToMainScreen(true);
-//		}
-		
 		setContentView(R.layout.activity_social_login_register);
 		
 		/******* Events ********/
+		// Declaramos los eventos para Views
 		final OnEditorActionListener mPasswordEditorListener = new TextView.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -102,6 +99,7 @@ public class SocialLogin extends Activity {
 		};
 		
 		/***** Switcher *****/
+		// Obtenemos el Switcher y registramos los eventos de los enlaces que lo activaran
 		layoutSwitcher = (ViewSwitcher) findViewById(R.id.layoutSwitcher);	//TODO Add animation
 		findViewById(R.id.txtToRegister).setOnClickListener(new OnClickListener() {
 			@Override
@@ -126,12 +124,13 @@ public class SocialLogin extends Activity {
 			}
 		});
 		/********************/
-
-		mEmailView = (EditText) findViewById(R.id.email);
-
-		mPasswordView = (EditText) findViewById(R.id.password);
 		
+		// Obtenemos todos los campos del formulario y registramos los eventos necesarios
+		mEmailView = (EditText) findViewById(R.id.email);
+		
+		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView.setOnEditorActionListener(mPasswordEditorListener);
+		
 		mPasswordRepeatView = (EditText) findViewById(R.id.passwordRepeat);
 		mPasswordRepeatView.setOnEditorActionListener(mPasswordRepeatEditorListener);
 
@@ -152,13 +151,6 @@ public class SocialLogin extends Activity {
 			}
 		});
 	}
-
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		super.onCreateOptionsMenu(menu);
-//		getMenuInflater().inflate(R.menu.social_login, menu);
-//		return true;
-//	}
 
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
@@ -242,7 +234,7 @@ public class SocialLogin extends Activity {
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			/*************/
+			/*************/ // Ocultamos el teclado
 			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 			/*************/
@@ -278,8 +270,9 @@ public class SocialLogin extends Activity {
 	}
 
 	/**
-	 * Represents an asynchronous login/registration task used to authenticate
-	 * the user.
+	 * Sub clase asincrona para el login / registro 
+	 *
+	 * @author e.astolfi
 	 */
 	public class UserLoginTask extends AsyncTask<String, Void, String> {
 		@Override
@@ -292,16 +285,17 @@ public class SocialLogin extends Activity {
 				return IConstantsCode.ERROR_CODE_SIMULATE_NETWORK;
 			}
 			
-			String HOST = "http://social-music.herokuapp.com/";
 			try {
 				HttpClient client = new DefaultHttpClient();
 				HttpUriRequest req;
+				// Preparamos la request para el login
 				if (params[0].equals(ACTION_LOGIN)) {
-					String uri = HOST + "login/" + mEmail + "/" + mPassword;
+					String uri = HOST_PROD + "login/" + mEmail + "/" + mPassword;
 					req = new HttpGet(uri);
 				}
+				// Preparamos la request para el registro
 				else {
-					String uri = HOST + "register";
+					String uri = HOST_PROD + "register";
 					HttpPost post = new HttpPost(uri);
 					
 					JSONObject jNewUser = new JSONObject();
@@ -314,6 +308,7 @@ public class SocialLogin extends Activity {
 					post.setHeader("content-type", "application/json");
 					req = post;
 				}
+				// Efectuamos la llamada de login / registro
 				HttpResponse execute = client.execute(req);
 				response = EntityUtils.toString(execute.getEntity());
 			} catch (ClientProtocolException e) {
@@ -332,11 +327,11 @@ public class SocialLogin extends Activity {
 			mAuthTask = null;
 			showProgress(false);
 
+			// Dependiendo del codigo devuelto, redirigimos a la pantalla de login o mostramos el error
 			if (response.equals(IConstantsCode.SUCCESS_CODE_LOGIN)) {
-//				Toast.makeText(getApplicationContext(), "Login Correcto", Toast.LENGTH_SHORT).show();
 				goToMainScreen(false);
-			} else if (response.equals(IConstantsCode.SUCCESS_CODE_REGISTER)) {
-//				Toast.makeText(getApplicationContext(), "Registro Correcto", Toast.LENGTH_SHORT).show();
+			}
+			else if (response.equals(IConstantsCode.SUCCESS_CODE_REGISTER)) {
 				goToMainScreen(false);
 			}
 			else if (response.equals(IConstantsCode.ERROR_CODE_LOGIN_FAILED)) {
@@ -359,15 +354,22 @@ public class SocialLogin extends Activity {
 		}
 	}
 	
+	/**
+	 * Redirige a la pantalla principal
+	 * 
+	 * @param alredyLoged
+	 */
 	private void goToMainScreen(boolean alredyLoged) {
+		// Si no se ha logeado aun (viene del registro)
 		if (!alredyLoged) {
-			SharedPreferences prefs = getSharedPreferences(PREF_USER_LOGED, Context.MODE_PRIVATE);
-			Editor edit = prefs.edit();
+			preferences = getSharedPreferences(PREF_USER_LOGED, Context.MODE_PRIVATE);
+			Editor edit = preferences.edit();
 			edit.putString(PREF_USER_MAIL, mEmail);
 			CheckBox ck = (CheckBox) findViewById(R.id.checkRecordar);
 			edit.putBoolean(PREF_USER_REMEMBER, ck.isChecked());
 			edit.commit();
 		}
+		// Lanzamos la actividad
 		Intent i = new Intent(getApplicationContext(), SocialMusic.class);
 		i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(i);

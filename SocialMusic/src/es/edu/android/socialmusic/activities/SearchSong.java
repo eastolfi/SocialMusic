@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -28,7 +27,7 @@ import com.echonest.api.v4.Song;
 import com.echonest.api.v4.SongParams;
 
 import es.edu.android.socialmusic.R;
-import es.edu.android.socialmusic.adapters.MyListAdapter;
+import es.edu.android.socialmusic.adapters.MySongListAdapter;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SearchSong extends Activity {
@@ -98,9 +97,9 @@ public class SearchSong extends Activity {
 					
 					@Override
 					protected void onPostExecute(List<Song> result) {
-						MyListAdapter songAdapter;
+						MySongListAdapter songAdapter;
 						if (result != null) {
-							songAdapter = new MyListAdapter(ctx, R.layout.simple_list_element, (ArrayList<Song>) result);
+							songAdapter = new MySongListAdapter(ctx, R.layout.simple_list_element, (ArrayList<Song>) result);
 							lstSongs.setAdapter(songAdapter);
 						}
 						
