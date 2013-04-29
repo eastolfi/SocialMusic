@@ -18,6 +18,23 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
+            android:id="@+id/nombreReg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_user_nombre"
+            android:inputType="textPersonName"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/apellidosReg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_user_apellidos"
+            android:inputType="textPersonName"
+            android:maxLines="1" >
+        </EditText>
+
+        <EditText
             android:id="@+id/emailReg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

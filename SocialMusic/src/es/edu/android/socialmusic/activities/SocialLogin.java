@@ -61,11 +61,15 @@ public class SocialLogin extends Activity {
 	private String mEmail;
 	private String mPassword;
 	private String mPasswordRepeat;
+	private String mNombre;
+	private String mApellidos;
 	// UI references
 	private ViewSwitcher layoutSwitcher;
 	private EditText mEmailView;
 	private EditText mPasswordView;
 	private EditText mPasswordRepeatView;
+	private EditText mNombreView;
+	private EditText mApellidosView;
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
@@ -108,6 +112,8 @@ public class SocialLogin extends Activity {
 				mEmailView = (EditText) findViewById(R.id.emailReg);
 				mPasswordView = (EditText) findViewById(R.id.passwordReg);
 				mPasswordView.setOnEditorActionListener(mPasswordEditorListener);
+				mNombreView = (EditText) findViewById(R.id.nombreReg);
+				mApellidosView = (EditText) findViewById(R.id.apellidosReg);
 				mLoginFormView = findViewById(R.id.registration_form);
 				layoutSwitcher.showNext();
 			}
@@ -133,6 +139,9 @@ public class SocialLogin extends Activity {
 		
 		mPasswordRepeatView = (EditText) findViewById(R.id.passwordRepeat);
 		mPasswordRepeatView.setOnEditorActionListener(mPasswordRepeatEditorListener);
+		
+		mNombreView = (EditText) findViewById(R.id.nombreReg);
+		mApellidosView = (EditText) findViewById(R.id.apellidosReg);
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
@@ -167,12 +176,18 @@ public class SocialLogin extends Activity {
 		mEmailView.setError(null);
 		mPasswordView.setError(null);
 		mPasswordRepeatView.setError(null);
+		mNombreView.setError(null);
+		mApellidosView.setError(null);
 		
 
 		// Store values at the time of the login attempt.
 		mEmail = mEmailView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
-		if (action.equals(ACTION_REGISTER)) mPasswordRepeat = mPasswordRepeatView.getText().toString();
+		if (action.equals(ACTION_REGISTER)) {
+			mPasswordRepeat = mPasswordRepeatView.getText().toString();
+			mNombre = mNombreView.getText().toString();
+			mApellidos = mApellidosView.getText().toString();
+		}
 
 		boolean cancel = false;
 		View focusView = null;
@@ -187,6 +202,22 @@ public class SocialLogin extends Activity {
 			else if (!mPasswordRepeat.equals(mPassword)) {
 				mPasswordRepeatView.setError(getString(R.string.error_password_not_match));
 				focusView = mPasswordRepeatView;
+				cancel = true;
+			}
+			if (mNombre.isEmpty()) {
+				mNombreView.setError(getString(R.string.error_field_required));
+				focusView = mNombreView;
+				cancel = true;
+			}
+			else if (mNombre.length() < 3) {
+				mNombreView.setError(getString(R.string.error_invalid_name));
+				focusView = mNombreView;
+				cancel = true;
+			}
+			
+			if (mApellidos.isEmpty()) {
+				mApellidosView.setError(getString(R.string.error_field_required));
+				focusView = mApellidosView;
 				cancel = true;
 			}
 		}
@@ -210,14 +241,13 @@ public class SocialLogin extends Activity {
 			focusView = mEmailView;
 			cancel = true;
 		}
+		
 
 		if (cancel) {
-			// There was an error; don't attempt login and focus the first
-			// form field with an error.
+			// There was an error; don't attempt login and focus the first form field with an error.
 			focusView.requestFocus();
 		} else {
-			// Show a progress spinner, and kick off a background task to
-			// perform the user login attempt.
+			// Show a progress spinner, and kick off a background task to perform the user login attempt.
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
@@ -299,8 +329,8 @@ public class SocialLogin extends Activity {
 					HttpPost post = new HttpPost(uri);
 					
 					JSONObject jNewUser = new JSONObject();
-					jNewUser.put("nombre", "User");
-					jNewUser.put("apellidos", "Test");
+					jNewUser.put("nombre", mNombre);
+					jNewUser.put("apellidos", mApellidos);
 					jNewUser.put("correo", mEmail);
 					jNewUser.put("password", mPassword);
 					post.setEntity(new StringEntity(jNewUser.toString()));
