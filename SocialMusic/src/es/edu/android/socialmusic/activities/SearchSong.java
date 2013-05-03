@@ -28,6 +28,7 @@ import com.echonest.api.v4.SongParams;
 
 import es.edu.android.socialmusic.R;
 import es.edu.android.socialmusic.adapters.MySongListAdapter;
+import es.edu.android.socialmusic.entities.MySong;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SearchSong extends Activity {
@@ -99,7 +100,11 @@ public class SearchSong extends Activity {
 					protected void onPostExecute(List<Song> result) {
 						MySongListAdapter songAdapter;
 						if (result != null) {
-							songAdapter = new MySongListAdapter(ctx, R.layout.simple_list_element, (ArrayList<Song>) result);
+							List<MySong> songs = new ArrayList<MySong>();
+							for (Song song : result) {
+								songs.add(new MySong(song));
+							}
+							songAdapter = new MySongListAdapter(ctx, R.layout.simple_song_list_element, (ArrayList<MySong>) songs);
 							lstSongs.setAdapter(songAdapter);
 						}
 						

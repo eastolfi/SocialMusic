@@ -38,6 +38,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 import es.edu.android.socialmusic.R;
+import es.edu.android.socialmusic.config.Config;
 import es.edu.android.socialmusic.constants.IConstantsCode;
 
 /**
@@ -47,8 +48,7 @@ import es.edu.android.socialmusic.constants.IConstantsCode;
  */
 public class SocialLogin extends Activity {
 	// Constants
-	private final String HOST_PROD = "http://social-music.herokuapp.com/";
-	private final String HOST_DESA = "http://socialmusic.eastolfi.c9.io/";
+	private final String HOST = Config.HOST_PROD;
 	private static final String ACTION_LOGIN = "login";
 	private static final String ACTION_REGISTER = "register";
 	private static final String PREF_USER_LOGED = "userLoged";
@@ -320,12 +320,12 @@ public class SocialLogin extends Activity {
 				HttpUriRequest req;
 				// Preparamos la request para el login
 				if (params[0].equals(ACTION_LOGIN)) {
-					String uri = HOST_PROD + "login/" + mEmail + "/" + mPassword;
+					String uri = HOST + "login/" + mEmail + "/" + mPassword;
 					req = new HttpGet(uri);
 				}
 				// Preparamos la request para el registro
 				else {
-					String uri = HOST_PROD + "register";
+					String uri = HOST + "register";
 					HttpPost post = new HttpPost(uri);
 					
 					JSONObject jNewUser = new JSONObject();

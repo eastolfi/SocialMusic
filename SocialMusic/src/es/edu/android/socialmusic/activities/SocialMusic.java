@@ -1,7 +1,18 @@
 package es.edu.android.socialmusic.activities;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -25,9 +36,12 @@ import com.echonest.api.v4.SongParams;
 
 import es.edu.android.socialmusic.R;
 import es.edu.android.socialmusic.adapters.MySongListAdapter;
+import es.edu.android.socialmusic.config.Config;
+import es.edu.android.socialmusic.entities.MySong;
 
 public class SocialMusic extends Activity {
 	// Constants
+	private static final String HOST = Config.HOST_PROD;
 	private static final String PREF_USER_LOGED = "userLoged";
 	private static final String PREF_USER_MAIL = "userMail";
 	private static final String PREF_USER_REMEMBER = "userRemember";
@@ -53,6 +67,7 @@ public class SocialMusic extends Activity {
 			goToLoginScreen();
 		}
 		
+		/*********** Get Hotttest Songs ************/
 		TextView txt = (TextView) findViewById(R.id.textView1);
 		txt.setText(preferencesUser.getString(PREF_USER_MAIL, "Anonimo"));
 
@@ -89,11 +104,11 @@ public class SocialMusic extends Activity {
 					@Override
 					protected void onPostExecute(List<Song> result) {
 						if (result != null) {
-							List<Song> songs = new ArrayList<Song>();
+							List<MySong> songs = new ArrayList<MySong>();
 							for (Song song : result) {
-								if (!songs.contains(song)) songs.add(song);
+								if (!songs.contains(song)) songs.add(new MySong(song));
 							}
-							MySongListAdapter songAdapter = new MySongListAdapter(ctx, R.layout.simple_list_element, songs);
+							MySongListAdapter songAdapter = new MySongListAdapter(ctx, R.layout.simple_song_list_element, songs);
 							currentSongs.setAdapter(songAdapter);
 						}
 						pDialog.cancel();
@@ -103,12 +118,58 @@ public class SocialMusic extends Activity {
 				}.execute();
 			}
 		});
+		/******************************************/
+		showNews();
 	}
 	
 	private void goToLoginScreen() {
 		Intent i = new Intent(getApplicationContext(), SocialLogin.class);
 		i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(i);
+	}
+	
+	private void showNews() {
+		String userMail = preferencesUser.getString(PREF_USER_MAIL, "");
+		new AsyncTask<String, Void, String>() {
+			
+			@Override
+			protected String doInBackground(String... params) {
+				String result = null;
+				try {
+					String uri = Config.HOST_DESA + "noticias/canciones/" + params[0];
+					HttpClient client = new DefaultHttpClient();
+					HttpGet get = new HttpGet(uri);
+					HttpResponse response = client.execute(get);
+					result = EntityUtils.toString(response.getEntity());
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return result;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				try {
+					JSONArray jArray = new JSONArray(result);
+					List<MySong> songs = new ArrayList<MySong>();
+					for (int i=0; i<jArray.length(); i++) {
+						JSONObject jObj = jArray.getJSONObject(i);
+						MySong song = new MySong(jObj.getString("titulo"),
+												jObj.getString("artista"),
+												jObj.getString("echoNestID"));
+						songs.add(song);
+					}
+					MySongListAdapter mAdapter = new MySongListAdapter(ctx, R.layout.simple_song_list_element, songs);
+					currentSongs.setAdapter(mAdapter);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+			
+//		};	
+		}.execute(userMail);
 	}
 	
 	@Override
